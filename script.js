@@ -1,4 +1,5 @@
 "use strict";
+const particlesArray = [];
 const canvas = document.getElementById('canvas1');
 if (!canvas)
     throw console.error("No canvas found");
@@ -7,15 +8,15 @@ if (!ctx)
     throw console.error("No canvas ctx found");
 const gW = window.innerWidth;
 const gH = window.innerHeight;
-let paintMode = false;
 setCanvasToWindow(canvas);
-// drawCircle(ctx)
 window.addEventListener('resize', (e) => {
     setCanvasToWindow(canvas);
-    // drawCircle(ctx)
 });
 const mouse = { x: null, y: null };
-canvas.addEventListener('click', () => paintMode ? removeMouseMoveListener(canvas, ctx) : addMouseMoveListener(canvas, ctx));
+window.addEventListener('mousemove', (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+});
 // Helper Functions
 function setCanvasToWindow(canvas) {
     canvas.width = window.innerWidth;
@@ -37,16 +38,6 @@ function drawCircle(ctx, mouse) {
     ctx.arc(x, y, 50, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI * 2);
-}
-function addMouseMoveListener(canvas, ctx) {
-    canvas.addEventListener('mousemove', paintCircle, true);
-    paintMode = true;
-}
-function removeMouseMoveListener(canvas, ctx) {
-    canvas.removeEventListener('mousemove', paintCircle, true);
-    paintMode = false;
 }
 function paintCircle(e) {
     if (!ctx)
@@ -56,11 +47,55 @@ function paintCircle(e) {
     const { x, y } = e;
     drawCircle(ctx, { x, y });
 }
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width || 1;
+        this.y = Math.random() * canvas.height || 1;
+        // this.x = mouse.x || 0
+        // this.y = mouse.y ||  0
+        this.size = Math.random() * 5 + 1;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+    }
+    update() {
+        // creates a 2D vector movement
+        this.x += this.speedX;
+        this.y += this.speedY;
+    }
+    draw() {
+        if (!ctx)
+            return;
+        console.log('mouse', mouse);
+        const { x, y } = mouse;
+        if (!x || !y)
+            return;
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 50, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+    }
+}
+function initParticles() {
+    for (let i = 0; i < 100; i++) {
+        particlesArray.push(new Particle());
+    }
+}
+initParticles();
+function handleParticlesUpdate() {
+    for (const particle of particlesArray) {
+        particle.update();
+        particle.draw();
+    }
+}
+console.log(particlesArray);
 function animate() {
     if (!ctx || !canvas)
         return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawCircle(ctx, mouse);
+    handleParticlesUpdate();
     requestAnimationFrame(animate);
 }
 animate();
