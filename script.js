@@ -91,7 +91,7 @@ class Particle {
         // ctx.fillStyle = prideColors[particlesArray.length % prideColors.length]
         // ctx.strokeStyle = prideColors[Math.round(Math.random() * prideColors.length )]
         ctx.fillStyle = this.color;
-        // ctx.strokeStyle = prideColors[particlesArray.length % prideColors.length]
+        ctx.strokeStyle = this.color;
         ctx.lineWidth = 3 * Math.random();
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -129,7 +129,7 @@ const animate = (timeStamp) => {
     }
     handleParticlesUpdate();
     currentTime = timeStamp;
-    hue++;
+    hue += 5;
     requestAnimationFrame(animate);
 };
 requestAnimationFrame(animate);
