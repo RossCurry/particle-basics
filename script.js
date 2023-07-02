@@ -15,22 +15,32 @@ window.addEventListener('resize', (e) => {
     setCanvasToWindow(canvas);
 });
 const mouse = { x: null, y: null };
-window.addEventListener('mousemove', (e) => {
-    mouse.x = e.x;
-    mouse.y = e.y;
+// window.addEventListener('mousemove', addToParticleArray)
+window.addEventListener('touchstart', addToParticleArray);
+window.addEventListener('touchmove', addToParticleArray);
+function addToParticleArray(e) {
+    if (e instanceof MouseEvent) {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    }
+    else {
+        console.log('e.touches', e.touches);
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+    }
     // trailing
     for (let i = 0; i < 5; i++) {
         particlesArray.push(new Particle());
     }
-});
-window.addEventListener('click', (e) => {
-    clearCanvas = !clearCanvas;
-    mouse.x = e.x;
-    mouse.y = e.y;
-    // exploding
-    for (let i = 0; i < 10; i++) {
-        particlesArray.push(new Particle());
-    }
+}
+window.addEventListener('mousedown', (e) => {
+    // clearCanvas = !clearCanvas
+    // mouse.x = e.x
+    // mouse.y = e.y
+    // // exploding
+    // for (let i = 0; i < 10; i++) {
+    //   particlesArray.push(new Particle())
+    // }
 });
 // Helper Functions
 function setCanvasToWindow(canvas) {
@@ -125,6 +135,7 @@ function handleParticlesUpdate() {
                     ctx.moveTo(particle.x, particle.y);
                     ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
                     ctx.strokeStyle = particle.color;
+                    ctx.lineWidth = particle.size / 10;
                     ctx.stroke();
                 }
             }
