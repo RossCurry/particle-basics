@@ -17,6 +17,13 @@ window.addEventListener('mousemove', (e) => {
     mouse.x = e.x;
     mouse.y = e.y;
 });
+window.addEventListener('click', (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+    for (let i = 0; i < 10; i++) {
+        particlesArray.push(new Particle());
+    }
+});
 // Helper Functions
 function setCanvasToWindow(canvas) {
     canvas.width = window.innerWidth;
@@ -48,11 +55,11 @@ function paintCircle(e) {
 }
 class Particle {
     constructor() {
-        this.x = Math.random() * canvas.width || 1;
-        this.y = Math.random() * canvas.height || 1;
-        // this.x = mouse.x || 0
-        // this.y = mouse.y ||  0
-        this.size = Math.random() * 25 + 15;
+        // this.x = Math.random() * canvas!.width || 1
+        // this.y = Math.random() * canvas!.height || 1
+        this.x = mouse.x || 0;
+        this.y = mouse.y || 0;
+        this.size = Math.random() * 15 + 5;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
         this.growthDirection = "shrink";
@@ -88,12 +95,6 @@ class Particle {
             this.size -= 0.1;
     }
 }
-function initParticles() {
-    for (let i = 0; i < 100; i++) {
-        particlesArray.push(new Particle());
-    }
-}
-initParticles();
 function handleParticlesUpdate() {
     for (const [i, particle] of particlesArray.entries()) {
         particle.update();
@@ -105,15 +106,14 @@ function handleParticlesUpdate() {
 }
 let currentTime = performance.now();
 const animate = (timeStamp) => {
-    const elapsedMs = timeStamp - currentTime;
-    if (elapsedMs > 0) {
-        if (!ctx || !canvas)
-            return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        handleParticlesUpdate();
-        currentTime = timeStamp;
-        requestAnimationFrame(animate);
-    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    handleParticlesUpdate();
+    currentTime = timeStamp;
     requestAnimationFrame(animate);
+    // const elapsedMs = timeStamp - currentTime
+    // if (elapsedMs > 0) {
+    //   if (!ctx || !canvas) return
+    // }
+    // requestAnimationFrame(animate)
 };
 requestAnimationFrame(animate);
