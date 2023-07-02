@@ -15,7 +15,7 @@ window.addEventListener('resize', (e) => {
     setCanvasToWindow(canvas);
 });
 const mouse = { x: null, y: null };
-// window.addEventListener('mousemove', addToParticleArray)
+window.addEventListener('mousemove', addToParticleArray);
 window.addEventListener('touchstart', addToParticleArray);
 window.addEventListener('touchmove', addToParticleArray);
 function addToParticleArray(e) {
@@ -24,7 +24,6 @@ function addToParticleArray(e) {
         mouse.y = e.y;
     }
     else {
-        console.log('e.touches', e.touches);
         mouse.x = e.touches[0].clientX;
         mouse.y = e.touches[0].clientY;
     }
@@ -34,13 +33,13 @@ function addToParticleArray(e) {
     }
 }
 window.addEventListener('mousedown', (e) => {
-    // clearCanvas = !clearCanvas
-    // mouse.x = e.x
-    // mouse.y = e.y
-    // // exploding
-    // for (let i = 0; i < 10; i++) {
-    //   particlesArray.push(new Particle())
-    // }
+    clearCanvas = !clearCanvas;
+    mouse.x = e.x;
+    mouse.y = e.y;
+    // exploding
+    for (let i = 0; i < 10; i++) {
+        particlesArray.push(new Particle());
+    }
 });
 // Helper Functions
 function setCanvasToWindow(canvas) {

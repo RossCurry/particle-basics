@@ -18,7 +18,7 @@ window.addEventListener('resize', (e: UIEvent) => {
 type MouseCoordinates = { x: number | null, y: number | null }
 const mouse: MouseCoordinates = { x: null, y: null }
 
-// window.addEventListener('mousemove', addToParticleArray)
+window.addEventListener('mousemove', addToParticleArray)
 window.addEventListener('touchstart', addToParticleArray)
 window.addEventListener('touchmove', addToParticleArray)
 function addToParticleArray(e: MouseEvent | TouchEvent){
@@ -26,7 +26,6 @@ function addToParticleArray(e: MouseEvent | TouchEvent){
     mouse.x = e.x
     mouse.y = e.y
   } else {
-    console.log('e.touches', e.touches)
     mouse.x = e.touches[0].clientX
     mouse.y = e.touches[0].clientY
   }
@@ -37,13 +36,13 @@ function addToParticleArray(e: MouseEvent | TouchEvent){
 }
 
 window.addEventListener('mousedown', (e: MouseEvent) => {
-  // clearCanvas = !clearCanvas
-  // mouse.x = e.x
-  // mouse.y = e.y
-  // // exploding
-  // for (let i = 0; i < 10; i++) {
-  //   particlesArray.push(new Particle())
-  // }
+  clearCanvas = !clearCanvas
+  mouse.x = e.x
+  mouse.y = e.y
+  // exploding
+  for (let i = 0; i < 10; i++) {
+    particlesArray.push(new Particle())
+  }
 })
 
 // Helper Functions
