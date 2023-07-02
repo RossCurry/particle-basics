@@ -1,5 +1,5 @@
 "use strict";
-const particlesArray = [];
+let particlesArray = [];
 const canvas = document.getElementById('canvas1');
 if (!canvas)
     throw console.error("No canvas found");
@@ -61,7 +61,7 @@ class Particle {
         // creates a 2D vector movement
         this.x += this.speedX;
         this.y += this.speedY;
-        this.growOrShrink();
+        this.size -= 0.1;
     }
     draw() {
         if (!ctx)
@@ -95,9 +95,12 @@ function initParticles() {
 }
 initParticles();
 function handleParticlesUpdate() {
-    for (const particle of particlesArray) {
+    for (const [i, particle] of particlesArray.entries()) {
         particle.update();
         particle.draw();
+        if (particle.size < 0.3) {
+            particlesArray.splice(i, 1);
+        }
     }
 }
 let currentTime = performance.now();

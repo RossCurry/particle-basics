@@ -1,5 +1,5 @@
 
-const particlesArray: Particle[] = []
+let particlesArray: Particle[] = []
 const canvas = document.getElementById('canvas1') as HTMLCanvasElement | null
 if (!canvas) throw console.error("No canvas found");
 const ctx = canvas.getContext('2d')
@@ -73,7 +73,7 @@ class Particle {
     // creates a 2D vector movement
     this.x += this.speedX
     this.y += this.speedY
-    this.growOrShrink()
+    this.size -= 0.1
   }
   draw() {
     if (!ctx) return
@@ -107,9 +107,12 @@ initParticles()
 
 
 function handleParticlesUpdate() {
-  for (const particle of particlesArray) {
+  for (const [i, particle] of particlesArray.entries()) {
     particle.update()
     particle.draw()
+    if (particle.size < 0.3){
+      particlesArray.splice(i, 1)
+    }
   }
 }
 
