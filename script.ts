@@ -143,7 +143,7 @@ function handleParticlesUpdate() {
           ctx.moveTo(particle.x, particle.y)
           ctx.lineTo(particlesArray[j].x, particlesArray[j].y)
           ctx.strokeStyle = particle.color
-          ctx.lineWidth = particle.size / 10 
+          ctx.lineWidth = particle.size
           ctx.stroke()
         }
       }
@@ -155,11 +155,11 @@ let currentTime = performance.now();
 const animate: FrameRequestCallback = (timeStamp: number) => {
   if (clearCanvas) {
     // clear whole canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    // ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // fade canvas - draws a new canvas with fillstyle with opacity on each animate
-    // ctx.fillStyle = 'rgba(40, 40, 40, 0.05)'
-    // ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = 'rgba(40, 40, 40, 0.05)'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
   }
   handleParticlesUpdate()
   currentTime = timeStamp
