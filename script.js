@@ -27,7 +27,6 @@ function drawRectangle(ctx) {
     ctx.fillRect(10, 20, 150, 50);
 }
 function drawCircle(ctx, mouse) {
-    console.log('mouse', mouse);
     const { x, y } = mouse;
     if (!x || !y)
         return;
@@ -65,7 +64,6 @@ class Particle {
     draw() {
         if (!ctx)
             return;
-        console.log('mouse', mouse);
         const { x, y } = mouse;
         if (!x || !y)
             return;
@@ -90,12 +88,18 @@ function handleParticlesUpdate() {
         particle.draw();
     }
 }
-console.log(particlesArray);
-function animate() {
-    if (!ctx || !canvas)
-        return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    handleParticlesUpdate();
+let currentTime = performance.now();
+const animate = (timeStamp) => {
+    console.log('timeStamp', timeStamp);
+    const elapsedMs = timeStamp - currentTime;
+    if (elapsedMs > 0) {
+        if (!ctx || !canvas)
+            return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        handleParticlesUpdate();
+        currentTime = timeStamp;
+        requestAnimationFrame(animate);
+    }
     requestAnimationFrame(animate);
-}
-animate();
+};
+requestAnimationFrame(animate);

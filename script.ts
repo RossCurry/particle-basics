@@ -33,7 +33,6 @@ function drawRectangle(ctx: CanvasRenderingContext2D) {
 }
 
 function drawCircle(ctx: CanvasRenderingContext2D, mouse: MouseCoordinates) {
-  console.log('mouse', mouse)
   const { x, y } = mouse
   if (!x || !y) return
   ctx.fillStyle = 'white'
@@ -75,7 +74,6 @@ class Particle {
   }
   draw() {
     if (!ctx) return
-    console.log('mouse', mouse)
     const { x, y } = mouse
     if (!x || !y) return
     ctx.fillStyle = 'white'
@@ -105,11 +103,19 @@ function handleParticlesUpdate() {
     particle.draw()
   }
 }
-console.log(particlesArray)
-function animate() {
-  if (!ctx || !canvas) return
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-  handleParticlesUpdate()
+
+let currentTime = performance.now();
+const  animate: FrameRequestCallback = (timeStamp: number) => {
+  console.log('timeStamp', timeStamp)
+
+  const elapsedMs = timeStamp - currentTime
+  if (elapsedMs > 0) {
+    if (!ctx || !canvas) return
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    handleParticlesUpdate()
+    currentTime = timeStamp
+    requestAnimationFrame(animate)
+  }
   requestAnimationFrame(animate)
 }
-animate()
+requestAnimationFrame(animate)
