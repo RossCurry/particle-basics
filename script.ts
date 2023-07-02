@@ -1,6 +1,7 @@
 
 let particlesArray: Particle[] = []
 let clearCanvas = true
+let hue = 0
 const canvas = document.getElementById('canvas1') as HTMLCanvasElement | null
 if (!canvas) throw console.error("No canvas found");
 const ctx = canvas.getContext('2d')
@@ -74,6 +75,7 @@ class Particle {
   speedX: number
   speedY: number
   growthDirection: "grow" | "shrink"
+  color: string
   constructor() {
     // this.x = Math.random() * canvas!.width || 1
     // this.y = Math.random() * canvas!.height || 1
@@ -83,6 +85,7 @@ class Particle {
     this.speedX = Math.random() * 3 - 1.5
     this.speedY = Math.random() * 3 - 1.5
     this.growthDirection = "shrink"
+    this.color = `hsl(${hue}, 100%, 60%)`
   }
   update() {
     // creates a 2D vector movement
@@ -97,9 +100,10 @@ class Particle {
     ]
     const { x, y } = mouse
     if (!x || !y) return
-    ctx.fillStyle = prideColors[particlesArray.length % prideColors.length]
+    // ctx.fillStyle = prideColors[particlesArray.length % prideColors.length]
     // ctx.strokeStyle = prideColors[Math.round(Math.random() * prideColors.length )]
-    ctx.strokeStyle = prideColors[particlesArray.length % prideColors.length]
+    ctx.fillStyle = this.color
+    // ctx.strokeStyle = prideColors[particlesArray.length % prideColors.length]
     ctx.lineWidth = 3 * Math.random()
     ctx.beginPath()
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
@@ -132,16 +136,12 @@ const animate: FrameRequestCallback = (timeStamp: number) => {
     // ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // fade canvas - draws a new canvas with fillstyle with opacity on each animate
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'
+    ctx.fillStyle = 'rgba(40, 40, 40, 0.05)'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
   }
   handleParticlesUpdate()
   currentTime = timeStamp
+  hue++
   requestAnimationFrame(animate)
-  // const elapsedMs = timeStamp - currentTime
-  // if (elapsedMs > 0) {
-  //   if (!ctx || !canvas) return
-  // }
-  // requestAnimationFrame(animate)
 }
 requestAnimationFrame(animate)
