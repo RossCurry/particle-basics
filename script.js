@@ -116,16 +116,29 @@ function handleParticlesUpdate() {
         if (particle.size < 0.3) {
             particlesArray.splice(i, 1);
         }
+        // comparison of particles
+        for (let j = i; j < particlesArray.length; j++) {
+            const distance = pythagorean(particle, particlesArray[j]);
+            if (distance < 100) {
+                if (ctx) {
+                    ctx.beginPath();
+                    ctx.moveTo(particle.x, particle.y);
+                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                    ctx.strokeStyle = particle.color;
+                    ctx.stroke();
+                }
+            }
+        }
     }
 }
 let currentTime = performance.now();
 const animate = (timeStamp) => {
     if (clearCanvas) {
-        // clear canvas
-        // ctx.clearRect(0, 0, canvas.width, canvas.height)
+        // clear whole canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         // fade canvas - draws a new canvas with fillstyle with opacity on each animate
-        ctx.fillStyle = 'rgba(40, 40, 40, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // ctx.fillStyle = 'rgba(40, 40, 40, 0.05)'
+        // ctx.fillRect(0, 0, canvas.width, canvas.height)
     }
     handleParticlesUpdate();
     currentTime = timeStamp;
@@ -133,3 +146,12 @@ const animate = (timeStamp) => {
     requestAnimationFrame(animate);
 };
 requestAnimationFrame(animate);
+function pythagorean(node1, node2) {
+    // measures distance between nodes, using pythagorean´s theory
+    // assuming a 90º right angle between node distances
+    const distanceX = node1.x - node2.x;
+    const distanceY = node1.y - node2.y;
+    // the formula
+    const hypothenuseDistance = Math.sqrt((distanceX * distanceX) - (distanceY * distanceY));
+    return hypothenuseDistance;
+}
