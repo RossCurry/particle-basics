@@ -19,11 +19,16 @@ const mouse: MouseCoordinates = { x: null, y: null }
 window.addEventListener('mousemove', (e: MouseEvent) => {
   mouse.x = e.x
   mouse.y = e.y
+  // trailing
+  for (let i = 0; i < 10; i++) {
+    particlesArray.push(new Particle())
+  }
 })
 
 window.addEventListener('click', (e: MouseEvent) => {
   mouse.x = e.x
   mouse.y = e.y
+  // exploding
   for (let i = 0; i < 10; i++) {
     particlesArray.push(new Particle())
   }
