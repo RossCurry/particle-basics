@@ -58,31 +58,40 @@ class Particle {
   size: number
   speedX: number
   speedY: number
+  growthDirection: "grow" | "shrink"
   constructor() {
     this.x = Math.random() * canvas!.width || 1
     this.y = Math.random() * canvas!.height || 1
     // this.x = mouse.x || 0
     // this.y = mouse.y ||  0
-    this.size = Math.random() * 5 + 1
+    this.size = Math.random() * 25 + 15
     this.speedX = Math.random() * 3 - 1.5
     this.speedY = Math.random() * 3 - 1.5
+    this.growthDirection = "shrink"
   }
   update() {
     // creates a 2D vector movement
     this.x += this.speedX
     this.y += this.speedY
+    this.growOrShrink()
   }
   draw() {
     if (!ctx) return
     const { x, y } = mouse
     if (!x || !y) return
-    ctx.fillStyle = 'white'
-    ctx.strokeStyle = 'red'
-    ctx.lineWidth = 10
+    ctx.fillStyle = 'grey'
+    ctx.strokeStyle = Math.random() > 0.8 ? 'red' : 'blue'
+    ctx.lineWidth = 3 * Math.random()
     ctx.beginPath()
-    ctx.arc(this.x, this.y, 50, 0, Math.PI * 2)
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
     ctx.fill()
     ctx.stroke()
+  }
+  growOrShrink() {
+    if (this.size > 25) this.growthDirection = "shrink"
+    if (this.size < 0.2) this.growthDirection = "grow"
+    if (this.growthDirection === "grow")  this.size += 0.1
+    else this.size -= 0.1
   }
 
 }
@@ -98,16 +107,14 @@ initParticles()
 
 
 function handleParticlesUpdate() {
-  for (const particle of particlesArray){
+  for (const particle of particlesArray) {
     particle.update()
     particle.draw()
   }
 }
 
 let currentTime = performance.now();
-const  animate: FrameRequestCallback = (timeStamp: number) => {
-  console.log('timeStamp', timeStamp)
-
+const animate: FrameRequestCallback = (timeStamp: number) => {
   const elapsedMs = timeStamp - currentTime
   if (elapsedMs > 0) {
     if (!ctx || !canvas) return
